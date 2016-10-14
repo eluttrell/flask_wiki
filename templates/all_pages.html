@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <ul>
+    {% for result in results_list %}
+        <li>
+            <a href="/{{result.title}}">{{result.title}}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

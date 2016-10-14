@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
+
 {% block body %}
 <p>
-    {{page_content}}
+    {{page_content | safe }}
 </p>
+{% endblock %}
+
+{% block footer %}
 <a href="/{{page_name}}/edit">Edit this page</a>
 {% endblock %}
