@@ -8,6 +8,7 @@ import datetime
 
 app = Flask('Wiki')
 db = pg.DB(dbname='wiki_db')
+app.secret_key = 'stupid fucking secret key'
 
 # unfinished capitalize title function
 
@@ -131,6 +132,46 @@ def save_page(page_name):
 
         )
     return redirect('/%s' % title)
+
+
+@app.route('/signup')
+def signup():
+    return render_template(
+        'signup.html',
+        title='Signup'
+    )
+
+
+@app.route('/login')
+def login():
+    return render_template(
+        'login.html',
+        title='Login'
+    )
+
+
+@app.route('/logout')
+def logout():
+    del session['username']
+
+    return redirect('/')
+
+
+@app.route('/submit_login', methods=['POST'])
+def submit_login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    query = db.query("select * from wiki_user where name = $1", username)
+    results_list = query.namedresult()
+    if len(results_list) > 0:
+        user = results_list[0]
+        if user.password == password:
+            session['username'] = user.name
+            return redirect('/')
+        else:
+            return redirect('/login')
+    else:
+        return redirect('/login')
 
 
 if __name__ == '__main__':

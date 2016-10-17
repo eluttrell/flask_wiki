@@ -1,10 +1,9 @@
-{% extends "layout.html" %}
-
-{% block body %}
+{% extends "layout.html" %} {% block body %} {% if session['username'] %}
 <form class="" action="/{{page_name}}/save" method="post">
     <input type="hidden" name="id" value={{page_id}}>
     <textarea name="content" rows="8" cols="40">{{page_content}}</textarea>
     <br>
     <button type="submit" name="button">Submit</button>
 </form>
-{% endblock %}
+{% else %}
+<h4>Please <a href="/login">login</a> to edit.</h4> {% endif %} {% endblock %}
