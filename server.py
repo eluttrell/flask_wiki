@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from wiki_linkify import wiki_linkify
 import pg
 import markdown
@@ -81,7 +81,7 @@ def edit_page(page_name):
     query = db.query('''
         select *
         from pages
-        where title = $1
+        where title = $1;
         ''', page_name)
 
     results_list = query.namedresult()
