@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
+    <script src="https://use.fontawesome.com/e588b334a2.js"></script>
     <style media="screen">
         #logged_in {
             position: absolute;
@@ -64,8 +65,13 @@
     <hr> {% block body %} {% endblock %}
 
     <br><br><br><br><br><br>
+    <form class="" action="/page_search" method="post">
+        <i class="fa fa-search"></i>
+        <input type="text" name="page_search" placeholder="Search">
+        <button type="submit" name="seach">Search</button>
+    </form>
     <hr>
-    <a href="/">Home</a> &nbsp; <a href="/all_pages">See all pages</a>&nbsp; {% block footer %} {% endblock %}
+    <a href="/">Home</a>&nbsp; <a href="/all_pages">See all pages</a>&nbsp; {% block footer %} {% endblock %}
 </body>
 
 </html>

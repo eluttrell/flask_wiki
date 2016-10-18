@@ -1,8 +1,8 @@
 {% extends "layout.html" %} {% block body %} {% if session['username'] %}
 <h4>You are already logged in!</h4> {% else %}
-<form class="" action="/submit_signup" method="post">
+<form class="" action="/submit_login" method="post">
     <input type="text" name="username" placeholder="username">
     <input type="password" name="password" placeholder="password">
-    <button class="button2" type="submit" name="button">Submit</button>
+    <button class="button2" type="submit" name="action" value="signup">Signup</button>
 </form>
 {% endif %} {% endblock %}

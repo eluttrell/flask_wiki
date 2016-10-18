@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 from wiki_linkify import wiki_linkify
 import pg
 import markdown
@@ -8,7 +8,7 @@ import datetime
 
 app = Flask('Wiki')
 db = pg.DB(dbname='wiki_db')
-app.secret_key = 'stupid fucking secret key'
+app.secret_key = 'happy slappy'
 
 # unfinished capitalize title function
 
@@ -69,6 +69,21 @@ def view_page(page_name):
             page_name=page_name,
             page_content=markdown.markdown(wiki_linkify(page_content))
         )
+    else:
+        return render_template(
+            'placeholder.html',
+            title="No Title",
+            page_name=page_name
+        )
+
+
+@app.route('/page_search', methods=['POST'])
+def page_search():
+    page_name = request.form.get('page_search')
+    query = db.query('select title from pages where title = $1', page_name)
+    results_list = query.namedresult()
+    if len(results_list) > 0:
+        return redirect('/%s' % page_name)
     else:
         return render_template(
             'placeholder.html',
@@ -142,6 +157,24 @@ def signup():
     )
 
 
+# @app.route('/submit_signup', methods=['POST'])
+# def submit_signup():
+#     username = request.form.get('username')
+#     password = request.form.get('password')
+#     print username, password
+#     query = db.query(
+#         "select name from wiki_user where name = $1", username)
+#     results_list = query.namedresult()
+#     if len(results_list) == 0:
+#         print "here we are"
+#         db.query(
+#             '''insert into wiki_user (name, password) values ($1, $2)''', username, password)
+#         return redirect('/')
+#     else:
+#         return redirect('/signup')
+#         flash("Username already exists!")
+
+
 @app.route('/login')
 def login():
     return render_template(
@@ -161,18 +194,27 @@ def logout():
 def submit_login():
     username = request.form.get('username')
     password = request.form.get('password')
+    action = request.form.get('action')
     query = db.query("select * from wiki_user where name = $1", username)
     results_list = query.namedresult()
-    if len(results_list) > 0:
+    if len(results_list) > 0 and action == 'login':
         user = results_list[0]
         if user.password == password:
             session['username'] = user.name
+            # flash("'%s', you have successfully logged in.'" % username)
             return redirect('/')
         else:
             return redirect('/login')
+    elif action == 'signup':
+        print "here we are"
+        db.query(
+            '''insert into wiki_user (name, password) values ($1, $2)''', username, password)
+        session['username'] = username
+        return redirect('/')
     else:
-        return redirect('/login')
+        return redirect('/signup')
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
+# , host='0.0.0.0' Use this line to make webpage accesible to others
