@@ -1,13 +1,22 @@
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
 from flask import Flask, render_template, request, redirect, session, flash
 from wiki_linkify import wiki_linkify
 import pg
+import os
 import markdown
 import datetime
 
 # is our current format with the title in layout.html the best way ? -----
 
 app = Flask('Wiki')
-db = pg.DB(dbname='wiki_db')
+db = db = pg.DB(
+    dbname=os.environ.get('PG_DBNAME'),
+    host=os.environ.get('PG_HOST'),
+    user=os.environ.get('PG_USERNAME'),
+    passwd=os.environ.get('PG_PASSWORD')
+)
 app.secret_key = 'happy_slappy'
 
 # unfinished capitalize title function
