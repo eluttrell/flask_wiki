@@ -8,7 +8,7 @@ import datetime
 
 app = Flask('Wiki')
 db = pg.DB(dbname='wiki_db')
-app.secret_key = 'happy slappy'
+app.secret_key = 'happy_slappy'
 
 # unfinished capitalize title function
 
